@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>伺服器名稱 - Minecraft 官方宣傳網站</title>
+    <title>cn伺服器 - Minecraft 官方宣傳網站</title>
     <style>
         :root {
             --primary: #22c55e;
@@ -116,15 +116,15 @@
 <body>
 
     <header>
-        <div class="badge">✨ 支援 Java 1.21+ & 基岩版跨平台</div>
-        <h1>你的伺服器名稱</h1>
+        <div class="badge">✨ 支援 Java 26.2</div>
+        <h1>cn伺服器</h1>
         <p class="hero-desc">打造最純粹、穩定且充滿樂趣的生存冒險世界。無需安裝複雜模組，立即連線開啟你的專屬旅程！</p>
 
         <div class="connect-panel">
             <!-- 即時伺服器狀態顯示 -->
             <div class="status-bar">
                 <div><span class="status-dot" id="status-dot"></span><span id="status-text">正在偵測伺服器狀態...</span></div>
-                <div>連線位址：<strong style="color: #38bdf8;" id="display-ip">載入中...</strong></div>
+                <div>連線位址：<strong style="color: #38bdf8;" id="display-ip">cn00.myvnc.com</strong></div>
             </div>
 
             <div class="btn-grid">
@@ -134,7 +134,7 @@
             </div>
 
             <div class="toast" id="toast-msg">
-                ✅ 已複製 IP！請開啟 Minecraft ➔ 多人遊戲 ➔ 新增伺服器 ➔ 按 Ctrl+V 貼上即可連線！
+                ✅ 已複製 IP（cn00.myvnc.com）！請開啟 Minecraft ➔ 多人遊戲 ➔ 新增伺服器 ➔ 按 Ctrl+V 貼上即可連線！
             </div>
         </div>
     </header>
@@ -173,15 +173,14 @@
     </section>
 
     <footer>
-        <p>© 2026 你的伺服器名稱 版權所有 | 本伺服器與 Mojang Studios 或 Microsoft 無任何官方關聯。</p>
+        <p>© 2026 cn伺服器 版權所有 | 本伺服器與 Mojang Studios 或 Microsoft 無任何官方關聯。</p>
     </footer>
 
     <script>
-        // 【只需修改這兩行】填入你的真實伺服器 IP 與名稱，網頁會自動套用到所有按鈕
-        const SERVER_ADDRESS = "請填寫你的真實IP";
-        const SERVER_NAME = "我的Minecraft伺服器";
+        const SERVER_ADDRESS = "cn00.myvnc.com";
+        const SERVER_NAME = "cn伺服器";
 
-        // 自動將上方設定填入畫面與基岩版按鈕
+        // 自動將設定填入畫面與基岩版按鈕
         document.getElementById("display-ip").innerText = SERVER_ADDRESS;
         document.getElementById("bedrock-btn").href = `minecraft://?addExternalServer=${SERVER_NAME}|${SERVER_ADDRESS}:19132`;
 
