@@ -8,7 +8,6 @@
         :root {
             --primary: #22c55e;
             --primary-dark: #16a34a;
-            --secondary: #3b82f6;
             --discord: #5865F2;
             --bg-dark: #0f172a;
             --card-bg: #1e293b;
@@ -20,8 +19,8 @@
 
         /* 頂部主視覺區塊 */
         header {
-            background: linear-gradient(rgba(15, 23, 42, 0.78), rgba(15, 23, 42, 0.95)), 
-                        url('https://unsplash.com') center/cover;
+            background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.98)), 
+                        #0f172a center/cover;
             padding: 90px 20px 70px;
             text-align: center;
             border-bottom: 2px solid #334155;
@@ -64,8 +63,7 @@
         .status-dot.online { background: var(--primary); box-shadow: 0 0 8px var(--primary); }
         .status-dot.offline { background: #ef4444; }
 
-        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        @media (max-width: 600px) { .btn-grid { grid-template-columns: 1fr; } }
+        .btn-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
 
         .btn {
             display: flex; align-items: center; justify-content: center;
@@ -74,8 +72,7 @@
         }
         .btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
         .btn-java { background: var(--primary); color: #052e16; }
-        .btn-bedrock { background: var(--secondary); color: #fff; }
-        .btn-discord { background: var(--discord); color: #fff; grid-column: 1 / -1; }
+        .btn-discord { background: var(--discord); color: #fff; }
 
         .toast {
             margin-top: 15px; padding: 10px; border-radius: 8px;
@@ -124,17 +121,16 @@
             <!-- 即時伺服器狀態顯示 -->
             <div class="status-bar">
                 <div><span class="status-dot" id="status-dot"></span><span id="status-text">正在偵測伺服器狀態...</span></div>
-                <div>連線位址：<strong style="color: #38bdf8;" id="display-ip">://myvnc.com</strong></div>
+                <div>連線位址：<strong style="color: #38bdf8;" id="display-ip">yourname.myvnc.com</strong></div>
             </div>
 
             <div class="btn-grid">
                 <button class="btn btn-java" onclick="copyIP()">📋 Java 版：一鍵複製 IP</button>
-                <a class="btn btn-bedrock" id="bedrock-btn" href="#">🚀 基岩版：自動開啟進服</a>
-                <a class="btn btn-discord" href="https://discord.gg" target="_blank">💬 加入官方 Discord 社群（獲取最新公告與禮包）</a>
+                <a class="btn btn-discord" href="https://discord.gg/qEU9gtHZuk" target="_blank">💬 加入官方 Discord 社群（獲取最新公告與禮包）</a>
             </div>
 
             <div class="toast" id="toast-msg">
-                ✅ 已複製 IP（://myvnc.com）！請開啟 Minecraft ➔ 多人遊戲 ➔ 新增伺服器 ➔ 按 Ctrl+V 貼上即可連線！
+                ✅ 已複製 IP（<span id="toast-ip"></span>）！請開啟 Minecraft ➔ 多人遊戲 ➔ 新增伺服器 ➔ 按 Ctrl+V 貼上即可連線！
             </div>
         </div>
     </header>
@@ -177,40 +173,41 @@
     </footer>
 
     <script>
-        const SERVER_ADDRESS = "://myvnc.com";
-        const SERVER_NAME = "cn伺服器";
+        // 【請修改這裡】填入你的完整伺服器網域（不要包含 ://）
+        const SERVER_ADDRESS = "cn00.myvnc.com";
 
-        // 自動將設定填入畫面與基岩版按鈕
+        // 自動將設定填入畫面
         document.getElementById("display-ip").innerText = SERVER_ADDRESS;
-        document.getElementById("bedrock-btn").href = `minecraft://?addExternalServer=${SERVER_NAME}|${SERVER_ADDRESS}:19132`;
+        document.getElementById("toast-ip").innerText = SERVER_ADDRESS;
 
         // 一鍵複製 IP 功能
         function copyIP() {
             navigator.clipboard.writeText(SERVER_ADDRESS).then(() => {
-                document.getElementById("toast-msg").style.display = "block";
+                const toast = document.getElementById("toast-msg");
+                toast.style.display = "block";
+                setTimeout(() => { toast.style.display = "none"; }, 5000);
             });
         }
 
-        // 直接使用 mcstatus.io API 偵測伺服器即時在線人數
+        // 使用 mcstatus.io API 偵測伺服器即時在線人數
         const dot = document.getElementById("status-dot");
         const text = document.getElementById("status-text");
 
-        fetch("https://api.mcstatus.io/v2/status/java/://myvnc.com")
+        fetch(`https://mcstatus.io{SERVER_ADDRESS}`)
             .then(response => response.json())
             .then(data => {
-                if (data && data.online) {
-                    dot.className = "status-dot online";
+                if (data.online) {
+                    dot.classList.add("online");
                     text.innerText = `伺服器在線中 (${data.players.online} / ${data.players.max} 人)`;
                 } else {
-                    dot.className = "status-dot offline";
-                    text.innerText = "伺服器維護中或離線";
+                    dot.classList.add("offline");
+                    text.innerText = "伺服器目前離線或維護中";
                 }
             })
             .catch(() => {
-                dot.className = "status-dot offline";
-                text.innerText = "狀態連線逾時";
+                dot.classList.add("offline");
+                text.innerText = "無法取得伺服器狀態";
             });
     </script>
-
 </body>
 </html>
