@@ -189,25 +189,42 @@
             });
         }
 
-        // 使用 mcstatus.io API 偵測伺服器即時在線人數
-        const dot = document.getElementById("status-dot");
-        const text = document.getElementById("status-text");
 
-        fetch(`https://mcstatus.io{SERVER_ADDRESS}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.online) {
-                    dot.classList.add("online");
-                    text.innerText = `伺服器在線中 (${data.players.online} / ${data.players.max} 人)`;
-                } else {
-                    dot.classList.add("offline");
-                    text.innerText = "伺服器目前離線或維護中";
-                }
-            })
-            .catch(() => {
-                dot.classList.add("offline");
-                text.innerText = "無法取得伺服器狀態";
-            });
-    </script>
-</body>
-</html>
+// 使用 mcstatus.io API 偵測伺服器即時在線人數
+const dot = document.getElementById("status-dot");
+const text = document.getElementById("status-text");
+
+async function updateServerStatus() {
+    dot.classList.remove("online", "offline");
+
+    try {
+        const response = await fetch(
+            `https://api.mcstatus.io/v2/status/java/${encodeURIComponent(SERVER_ADDRESS)}`
+        );
+
+        if (!response.ok) {
+            throw new Error("API 回應錯誤");
+        }
+
+        const data = await response.json();
+
+        if (data.online) {
+            dot.classList.add("online");
+            text.innerText =
+                `伺服器在線中 (${data.players.online} / ${data.players.max} 人)`;
+        } else {
+            dot.classList.add("offline");
+            text.innerText = "伺服器目前離線或維護中";
+        }
+
+    } catch (error) {
+        dot.classList.add("offline");
+        text.innerText = "無法取得伺服器狀態";
+        console.error(error);
+    }
+}
+
+// 網站載入立即查詢，每 60 秒更新
+updateServerStatus();
+setInterval(updateServerStatus, 60000);
+
