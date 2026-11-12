@@ -124,7 +124,7 @@
             <!-- 即時伺服器狀態顯示 -->
             <div class="status-bar">
                 <div><span class="status-dot" id="status-dot"></span><span id="status-text">正在偵測伺服器狀態...</span></div>
-                <div>連線位址：<strong style="color: #38bdf8;" id="display-ip">cn00.myvnc.com</strong></div>
+                <div>連線位址：<strong style="color: #38bdf8;" id="display-ip">://myvnc.com</strong></div>
             </div>
 
             <div class="btn-grid">
@@ -134,7 +134,7 @@
             </div>
 
             <div class="toast" id="toast-msg">
-                ✅ 已複製 IP（cn00.myvnc.com）！請開啟 Minecraft ➔ 多人遊戲 ➔ 新增伺服器 ➔ 按 Ctrl+V 貼上即可連線！
+                ✅ 已複製 IP（://myvnc.com）！請開啟 Minecraft ➔ 多人遊戲 ➔ 新增伺服器 ➔ 按 Ctrl+V 貼上即可連線！
             </div>
         </div>
     </header>
@@ -177,7 +177,7 @@
     </footer>
 
     <script>
-        const SERVER_ADDRESS = "cn00.myvnc.com";
+        const SERVER_ADDRESS = "://myvnc.com";
         const SERVER_NAME = "cn伺服器";
 
         // 自動將設定填入畫面與基岩版按鈕
@@ -191,33 +191,24 @@
             });
         }
 
-        // 雙重 API 自動偵測伺服器在線人數
+        // 直接使用 mcstatus.io API 偵測伺服器即時在線人數
         const dot = document.getElementById("status-dot");
         const text = document.getElementById("status-text");
 
-        fetch(`https://mcsrvstat.us{SERVER_ADDRESS}`)
-            .then(res => res.json())
+        fetch("https://api.mcstatus.io/v2/status/java/://myvnc.com")
+            .then(response => response.json())
             .then(data => {
                 if (data && data.online) {
                     dot.className = "status-dot online";
                     text.innerText = `伺服器在線中 (${data.players.online} / ${data.players.max} 人)`;
                 } else {
-                    return fetch(`https://mcstatus.io{SERVER_ADDRESS}`)
-                        .then(res2 => res2.json())
-                        .then(data2 => {
-                            if (data2 && data2.online) {
-                                dot.className = "status-dot online";
-                                text.innerText = `伺服器在線中 (${data2.players.online} / ${data2.players.max} 人)`;
-                            } else {
-                                dot.className = "status-dot offline";
-                                text.innerText = "伺服器維護中或離線";
-                            }
-                        });
+                    dot.className = "status-dot offline";
+                    text.innerText = "伺服器維護中或離線";
                 }
             })
             .catch(() => {
                 dot.className = "status-dot offline";
-                text.innerText = "無法取得即時人數";
+                text.innerText = "狀態連線逾時";
             });
     </script>
 
