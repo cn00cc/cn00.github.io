@@ -191,22 +191,33 @@
             });
         }
 
-        // 自動透過公開 API 偵測伺服器在線人數
+        // 雙重 API 自動偵測伺服器在線人數
+        const dot = document.getElementById("status-dot");
+        const text = document.getElementById("status-text");
+
         fetch(`https://mcsrvstat.us{SERVER_ADDRESS}`)
-            .then(response => response.json())
+            .then(res => res.json())
             .then(data => {
-                const dot = document.getElementById("status-dot");
-                const text = document.getElementById("status-text");
-                if (data.online) {
-                    dot.classList.add("online");
+                if (data && data.online) {
+                    dot.className = "status-dot online";
                     text.innerText = `伺服器在線中 (${data.players.online} / ${data.players.max} 人)`;
                 } else {
-                    dot.classList.add("offline");
-                    text.innerText = "伺服器維護中或離線";
+                    return fetch(`https://mcstatus.io{SERVER_ADDRESS}`)
+                        .then(res2 => res2.json())
+                        .then(data2 => {
+                            if (data2 && data2.online) {
+                                dot.className = "status-dot online";
+                                text.innerText = `伺服器在線中 (${data2.players.online} / ${data2.players.max} 人)`;
+                            } else {
+                                dot.className = "status-dot offline";
+                                text.innerText = "伺服器維護中或離線";
+                            }
+                        });
                 }
             })
             .catch(() => {
-                document.getElementById("status-text").innerText = "無法取得即時人數";
+                dot.className = "status-dot offline";
+                text.innerText = "無法取得即時人數";
             });
     </script>
 
