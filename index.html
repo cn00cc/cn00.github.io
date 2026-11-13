@@ -96,7 +96,6 @@
         .music-icon {
             font-size: 1.2rem;
         }
-        /* 播放時音符圖示跳動動畫 */
         .playing .music-icon {
             animation: noteBounce 0.8s ease-in-out infinite alternate;
         }
@@ -327,13 +326,12 @@
         </button>
     </div>
 
-    <!-- 🎵 背景音樂播放器元件 -->
+    <!-- 🎵 背景音樂播放器元件（已配置治癒系琴音 Lo-Fi 旋律） -->
     <div class="music-player-container">
         <button class="music-btn" id="music-toggle-btn" onclick="toggleMusic()">
             <span class="music-icon" id="music-icon">🎵</span> 
             <span id="music-text">播放背景音樂</span>
         </button>
-        <!-- 使用線上輕柔純音樂來源 -->
         <audio id="bgm" loop>
             <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf7f6.mp3?filename=lofi-study-112191.mp3" type="audio/mpeg">
         </audio>
