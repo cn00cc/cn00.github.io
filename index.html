@@ -43,6 +43,85 @@
             cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 16 16'><path fill='%230f172a' d='M6 1h4v4h4v4h-4v4H6V9H2V5h4V1z'/><path fill='%23f472b6' d='M7 2h2v4h4v2H9v4H7V8H3V6h4V2z'/><path fill='%23fbcfe8' d='M7 6h2v2H7V6z'/></svg>") 16 16, pointer !important;
         }
 
+        /* 🎬 進入動畫開場畫面 */
+        #intro-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #090d16;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+        #intro-screen.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .intro-logo {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            animation: introBounce 1.2s ease-in-out infinite alternate;
+            image-rendering: pixelated;
+        }
+        @keyframes introBounce {
+            0% { transform: translateY(0) scale(1); }
+            100% { transform: translateY(-12px) scale(1.08); }
+        }
+        .intro-title {
+            color: #f8fafc;
+            font-size: 1.8rem;
+            font-weight: bold;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(34, 197, 94, 0.4);
+        }
+        .intro-subtitle {
+            color: #94a3b8;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+        .intro-enter-btn {
+            background: var(--primary);
+            color: #052e16;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
+            transition: transform 0.2s;
+        }
+        .intro-enter-btn:hover {
+            transform: scale(1.08);
+        }
+        .loading-bar {
+            width: 180px;
+            height: 4px;
+            background: #1e293b;
+            border-radius: 4px;
+            margin-top: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+        .loading-progress {
+            position: absolute;
+            top: 0; left: 0;
+            height: 100%;
+            width: 0%;
+            background: var(--primary);
+            animation: loadProgress 1.2s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+        }
+        @keyframes loadProgress {
+            to { width: 100%; }
+        }
+
         /* 主題切換按鈕懸浮列 */
         .theme-switch-container {
             position: fixed;
@@ -319,6 +398,17 @@
 </head>
 <body>
 
+    <!-- 🎬 進入動畫開場畫面（附帶「進入伺服器」按鈕以完美解鎖音樂自動播放） -->
+    <div id="intro-screen">
+        <div class="intro-logo">🌸</div>
+        <div class="intro-title">cn伺服器</div>
+        <div class="intro-subtitle">準備好展開你的生存冒險了嗎？</div>
+        <button class="intro-enter-btn" onclick="enterWebsite()">✨ 進入伺服器世界</button>
+        <div class="loading-bar">
+            <div class="loading-progress"></div>
+        </div>
+    </div>
+
     <!-- 主題切換按鈕 -->
     <div class="theme-switch-container">
         <button class="theme-btn" id="theme-toggle-btn" onclick="toggleTheme()">
@@ -326,7 +416,7 @@
         </button>
     </div>
 
-    <!-- 🎵 背景音樂播放器元件（已對應您的 SUK.mp3） -->
+    <!-- 🎵 背景音樂播放器元件（對應您的 SUK.mp3） -->
     <div class="music-player-container">
         <button class="music-btn" id="music-toggle-btn" onclick="toggleMusic()">
             <span class="music-icon" id="music-icon">🎵</span> 
@@ -425,6 +515,26 @@
     </footer>
 
     <script>
+        /* 🎬 點擊「進入伺服器世界」按鈕後，完美淡出開場動畫並自動播放 SUK.mp3 音樂 */
+        function enterWebsite() {
+            const intro = document.getElementById("intro-screen");
+            if (intro) {
+                intro.classList.add("fade-out");
+            }
+
+            // 自動觸發音樂播放
+            const bgm = document.getElementById("bgm");
+            const musicBtn = document.getElementById("music-toggle-btn");
+            const musicText = document.getElementById("music-text");
+
+            bgm.play().then(() => {
+                musicBtn.classList.add("playing");
+                musicText.innerText = "暫停背景音樂";
+            }).catch(e => {
+                console.log("自動播放被瀏覽器限制", e);
+            });
+        }
+
         const SERVER_ADDRESS = "cn00.myvnc.com";
 
         document.getElementById("display-ip").innerText = SERVER_ADDRESS;
@@ -505,7 +615,7 @@
             }
         }
 
-        /* 🎵 背景音樂開關控制（對應 SUK.mp3） */
+        /* 🎵 背景音樂開關控制 */
         function toggleMusic() {
             const bgm = document.getElementById("bgm");
             const musicBtn = document.getElementById("music-toggle-btn");
@@ -516,7 +626,7 @@
                     musicBtn.classList.add("playing");
                     musicText.innerText = "暫停背景音樂";
                 }).catch(e => {
-                    console.log("播放失敗或瀏覽器阻擋自動播放", e);
+                    console.log("播放失敗", e);
                 });
             } else {
                 bgm.pause();
