@@ -326,14 +326,14 @@
         </button>
     </div>
 
-    <!-- 🎵 背景音樂播放器元件（已配置治癒系琴音 Lo-Fi 旋律） -->
+    <!-- 🎵 背景音樂播放器元件（已對應您的 SUK.mp3） -->
     <div class="music-player-container">
         <button class="music-btn" id="music-toggle-btn" onclick="toggleMusic()">
             <span class="music-icon" id="music-icon">🎵</span> 
             <span id="music-text">播放背景音樂</span>
         </button>
         <audio id="bgm" loop>
-            <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf7f6.mp3?filename=lofi-study-112191.mp3" type="audio/mpeg">
+            <source src="SUK.mp3" type="audio/mpeg">
         </audio>
     </div>
 
@@ -505,7 +505,7 @@
             }
         }
 
-        /* 🎵 背景音樂開關控制 */
+        /* 🎵 背景音樂開關控制（對應 SUK.mp3） */
         function toggleMusic() {
             const bgm = document.getElementById("bgm");
             const musicBtn = document.getElementById("music-toggle-btn");
