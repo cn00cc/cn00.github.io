@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>cn伺服器 - Minecraft 官方宣傳網站</title>
     <style>
+        /* 預設：暗色模式 (Dark Theme) */
         :root {
             --primary: #22c55e;
             --primary-dark: #16a34a;
@@ -13,30 +14,97 @@
             --card-bg: #1e293b;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
+            --border-color: #334155;
+            --panel-bg: rgba(30, 41, 59, 0.9);
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: "Microsoft JhengHei", "Segoe UI", sans-serif; }
+
+        /* 亮色模式 (Light Theme) */
+        [data-theme="light"] {
+            --bg-dark: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #cbd5e1;
+            --panel-bg: rgba(255, 255, 255, 0.95);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: "Microsoft JhengHei", "Segoe UI", sans-serif; transition: background-color 0.3s, color 0.3s; }
         
-        /* 自訂 Minecraft 像素風格鼠標（一般狀態：鑽石藍像素指標） */
         body { 
             background-color: var(--bg-dark); 
             color: var(--text-main); 
             line-height: 1.6;
+            overflow-x: hidden;
             cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 16 16'><path fill='%230f172a' d='M1 1h2v2h2v2h2v2h2v2h2v2H9v2H7v-2H5v2H3v-4H1V1z'/><path fill='%2338bdf8' d='M2 2h1v2h2v2h2v2h2v2H7v2H6v-2H4v2H3v-3H2V2z'/><path fill='%23e0f2fe' d='M2 2h1v6H2V2z'/></svg>") 2 2, auto;
         }
 
-        /* 可點擊按鈕與連結的自訂鼠標（懸停狀態：櫻花粉像素手勢/十字準星） */
         a, button, .btn, .card {
             cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 16 16'><path fill='%230f172a' d='M6 1h4v4h4v4h-4v4H6V9H2V5h4V1z'/><path fill='%23f472b6' d='M7 2h2v4h4v2H9v4H7V8H3V6h4V2z'/><path fill='%23fbcfe8' d='M7 6h2v2H7V6z'/></svg>") 16 16, pointer !important;
         }
 
-        /* 頂部主視覺區塊（已套用全新的 Minecraft 櫻花背景） */
+        /* 主題切換按鈕懸浮列 */
+        .theme-switch-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        .theme-btn {
+            background: var(--card-bg);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 10px 16px;
+            border-radius: 50px;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+        .theme-btn:hover {
+            transform: scale(1.05);
+            border-color: var(--primary);
+        }
+
+        /* 櫻花飄落特效容器 */
+        .sakura-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+            overflow: hidden;
+        }
+        .sakura {
+            position: absolute;
+            background: #ffb7c5;
+            border-radius: 150% 0 150% 0;
+            animation: fall linear infinite;
+            opacity: 0.8;
+        }
+        @keyframes fall {
+            0% {
+                transform: translateY(-10vh) translateX(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(105vh) translateX(50px) rotate(360deg);
+                opacity: 0.2;
+            }
+        }
+
+        /* 頂部主視覺區塊 */
         header {
             background: linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.95)), 
                         url('watermarked_img_15164545292434901225.jpg') center/cover no-repeat;
             padding: 110px 20px 80px;
             text-align: center;
-            border-bottom: 2px solid #334155;
+            border-bottom: 2px solid var(--border-color);
             box-shadow: inset 0 -20px 30px rgba(15, 23, 42, 0.8);
+            position: relative;
         }
         .badge {
             display: inline-block;
@@ -49,18 +117,18 @@
             border: 1px solid var(--primary);
             margin-bottom: 20px;
         }
-        h1 { font-size: 3rem; font-weight: 800; letter-spacing: 2px; margin-bottom: 15px; text-shadow: 0 4px 12px rgba(0,0,0,0.8); }
+        h1 { font-size: 3rem; font-weight: 800; letter-spacing: 2px; margin-bottom: 15px; text-shadow: 0 4px 12px rgba(0,0,0,0.8); color: #fff; }
         .hero-desc { max-width: 650px; margin: 0 auto 30px; color: #e2e8f0; font-size: 1.15rem; text-shadow: 0 2px 4px rgba(0,0,0,0.6); }
 
         /* 連線控制台 */
         .connect-panel {
             max-width: 680px;
             margin: 0 auto;
-            background: rgba(30, 41, 59, 0.9);
+            background: var(--panel-bg);
             backdrop-filter: blur(8px);
             padding: 25px;
             border-radius: 16px;
-            border: 1px solid #475569;
+            border: 1px solid var(--border-color);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
         }
         .status-bar {
@@ -69,11 +137,12 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 10px;
-            background: #0f172a;
+            background: var(--bg-dark);
             padding: 12px 20px;
             border-radius: 10px;
             margin-bottom: 20px;
             font-size: 0.95rem;
+            border: 1px solid var(--border-color);
         }
         .status-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #eab308; margin-right: 8px; }
         .status-dot.online { background: var(--primary); box-shadow: 0 0 8px var(--primary); }
@@ -98,24 +167,24 @@
 
         /* 內容區塊通用樣式 */
         section { max-width: 1000px; margin: 60px auto; padding: 0 20px; }
-        h2 { text-align: center; font-size: 2rem; margin-bottom: 40px; color: #e2e8f0; }
+        h2 { text-align: center; font-size: 2rem; margin-bottom: 40px; color: var(--text-main); }
         h2 span { color: var(--primary); }
 
         /* 伺服器特色卡片 */
         .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
         .card {
             background: var(--card-bg); padding: 30px; border-radius: 14px;
-            border: 1px solid #334155; transition: 0.3s;
+            border: 1px solid var(--border-color); transition: 0.3s;
         }
         .card:hover { border-color: var(--primary); transform: translateY(-4px); }
         .card-icon { font-size: 2.5rem; margin-bottom: 15px; }
-        .card h3 { font-size: 1.3rem; margin-bottom: 10px; color: #fff; }
+        .card h3 { font-size: 1.3rem; margin-bottom: 10px; color: var(--text-main); }
         .card p { color: var(--text-muted); font-size: 0.95rem; }
 
         /* 規章區塊 */
-        .rules-box { background: var(--card-bg); padding: 35px; border-radius: 14px; border: 1px solid #334155; }
+        .rules-box { background: var(--card-bg); padding: 35px; border-radius: 14px; border: 1px solid var(--border-color); }
         .rules-list { list-style: none; }
-        .rules-list li { padding: 12px 0; border-bottom: 1px solid #334155; display: flex; align-items: center; }
+        .rules-list li { padding: 12px 0; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; color: var(--text-main); }
         .rules-list li:last-child { border-bottom: none; }
         .rule-num {
             background: var(--primary); color: #052e16; font-weight: bold;
@@ -123,10 +192,20 @@
             align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0;
         }
 
-        footer { text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 0.9rem; border-top: 1px solid #1e293b; }
+        footer { text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 0.9rem; border-top: 1px solid var(--border-color); }
     </style>
 </head>
 <body>
+
+    <!-- 主題切換按鈕 -->
+    <div class="theme-switch-container">
+        <button class="theme-btn" id="theme-toggle-btn" onclick="toggleTheme()">
+            <span id="theme-icon">🌙</span> <span id="theme-text">切換亮色模式</span>
+        </button>
+    </div>
+
+    <!-- 動態櫻花花瓣飄落層 -->
+    <div class="sakura-container" id="sakura-container"></div>
 
     <header>
         <div class="badge">✨ 支援 Java 26.2</div>
@@ -162,7 +241,7 @@
             <div class="card">
                 <div class="card-icon">🎵</div>
                 <h3>自訂互動娛樂</h3>
-                <p>支援自訂音樂點播與豐富社群活動，與好友在遊戲中一邊建造一邊享受專屬背景音樂。</p>
+                <p>支援自訂音樂點播與豐富社群活動，與好友 in 遊戲中一邊建造一邊享受專屬背景音樂。</p>
             </div>
             <div class="card">
                 <div class="card-icon">⚡</div>
@@ -172,7 +251,7 @@
         </div>
     </section>
     
-    <!-- 世界 3D 線上地圖（同步套用櫻花背景） -->
+    <!-- 世界 3D 線上地圖 -->
     <section id="live-map" style="max-width: 960px; margin: 60px auto; padding: 0 20px;">
         <h2>世界 <span>3D 線上地圖</span></h2>
         <div style="
@@ -180,7 +259,7 @@
                         url('watermarked_img_15164545292434901225.jpg') center/cover no-repeat;
             padding: 55px 30px;
             border-radius: 14px;
-            border: 2px solid #334155;
+            border: 2px solid var(--border-color);
             text-align: center;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.45);
         ">
@@ -239,6 +318,7 @@
             }
         }
 
+        /* 伺服器狀態即時偵測 */
         const dot = document.getElementById("status-dot");
         const text = document.getElementById("status-text");
 
@@ -273,6 +353,46 @@
 
         updateServerStatus();
         setInterval(updateServerStatus, 60000);
+
+        /* 🌙 亮暗色主題切換功能 */
+        function toggleTheme() {
+            const htmlElement = document.documentElement;
+            const themeIcon = document.getElementById("theme-icon");
+            const themeText = document.getElementById("theme-text");
+
+            if (htmlElement.getAttribute("data-theme") === "light") {
+                htmlElement.removeAttribute("data-theme");
+                themeIcon.innerText = "🌙";
+                themeText.innerText = "切換亮色模式";
+            } else {
+                htmlElement.setAttribute("data-theme", "light");
+                themeIcon.innerText = "☀️";
+                themeText.innerText = "切換暗色模式";
+            }
+        }
+
+        /* 🌸 自動生成動態櫻花飄落特效 */
+        function createSakura() {
+            const container = document.getElementById("sakura-container");
+            const sakuraCount = 25; // 畫面上的花瓣數量
+
+            for (let i = 0; i < sakuraCount; i++) {
+                const sakura = document.createElement("div");
+                sakura.classList.add("sakura");
+                
+                // 隨機大小、位置、動畫速度與延遲
+                const size = Math.random() * 8 + 8; // 8px ~ 16px
+                sakura.style.width = `${size}px`;
+                sakura.style.height = `${size * 0.8}px`;
+                sakura.style.left = `${Math.random() * 100}vw`;
+                sakura.style.animationDuration = `${Math.random() * 6 + 4}s`; // 4秒 ~ 10秒
+                sakura.style.animationDelay = `${Math.random() * 5}s`;
+                
+                container.appendChild(sakura);
+            }
+        }
+
+        createSakura();
     </script>
 </body>
 </html>
