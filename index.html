@@ -9,63 +9,45 @@
             --primary: #22c55e;
             --primary-dark: #16a34a;
             --discord: #5865F2;
-            --bg-dark: #0b1120;
+            --bg-dark: #0f172a;
             --card-bg: #1e293b;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: "Microsoft JhengHei", "Segoe UI", sans-serif; }
-        body { 
-            background-color: var(--bg-dark); 
-            color: var(--text-main); 
-            line-height: 1.6;
-            /* 加入細微的 Minecraft 方塊網格背景 */
-            background-image: 
-                linear-gradient(rgba(34, 197, 94, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(34, 197, 94, 0.03) 1px, transparent 1px);
-            background-size: 32px 32px;
-        }
+        body { background-color: var(--bg-dark); color: var(--text-main); line-height: 1.6; }
 
         /* 頂部主視覺區塊 */
         header {
-            background: radial-gradient(circle at top, rgba(34, 197, 94, 0.15) 0%, rgba(11, 17, 32, 0.95) 70%);
-            padding: 80px 20px 60px;
+            background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.98)), 
+                        #0f172a center/cover;
+            padding: 90px 20px 70px;
             text-align: center;
-            border-bottom: 1px solid #1e293b;
+            border-bottom: 2px solid #334155;
         }
         .badge {
             display: inline-block;
-            background: rgba(34, 197, 94, 0.15);
+            background: rgba(34, 197, 94, 0.2);
             color: #4ade80;
-            padding: 6px 18px;
+            padding: 6px 16px;
             border-radius: 50px;
             font-weight: bold;
-            font-size: 0.9rem;
-            border: 1px solid rgba(34, 197, 94, 0.4);
+            font-size: 0.95rem;
+            border: 1px solid var(--primary);
             margin-bottom: 20px;
-            box-shadow: 0 0 15px rgba(34, 197, 94, 0.2);
         }
-        h1 { 
-            font-size: 3.2rem; 
-            font-weight: 800; 
-            letter-spacing: 3px; 
-            margin-bottom: 15px; 
-            background: linear-gradient(to right, #ffffff, #cbd5e1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .hero-desc { max-width: 620px; margin: 0 auto 35px; color: var(--text-muted); font-size: 1.1rem; }
+        h1 { font-size: 3rem; font-weight: 800; letter-spacing: 2px; margin-bottom: 15px; text-shadow: 0 4px 12px rgba(0,0,0,0.5); }
+        .hero-desc { max-width: 650px; margin: 0 auto 30px; color: var(--text-muted); font-size: 1.15rem; }
 
         /* 連線控制台 */
         .connect-panel {
-            max-width: 650px;
+            max-width: 680px;
             margin: 0 auto;
-            background: rgba(30, 41, 59, 0.85);
-            backdrop-filter: blur(10px);
+            background: var(--card-bg);
             padding: 25px;
             border-radius: 16px;
             border: 1px solid #334155;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
         }
         .status-bar {
             display: flex;
@@ -74,71 +56,52 @@
             flex-wrap: wrap;
             gap: 10px;
             background: #0f172a;
-            padding: 12px 18px;
+            padding: 12px 20px;
             border-radius: 10px;
-            margin-bottom: 18px;
+            margin-bottom: 20px;
             font-size: 0.95rem;
-            border: 1px solid #1e293b;
         }
-        .status-dot { 
-            display: inline-block; width: 10px; height: 10px; border-radius: 50%; 
-            background: #eab308; margin-right: 8px; animation: pulse 1.5s infinite;
-        }
-        .status-dot.online { background: var(--primary); box-shadow: 0 0 10px var(--primary); animation: none; }
-        .status-dot.offline { background: #ef4444; box-shadow: 0 0 8px #ef4444; animation: none; }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
+        .status-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #eab308; margin-right: 8px; }
+        .status-dot.online { background: var(--primary); box-shadow: 0 0 8px var(--primary); }
+        .status-dot.offline { background: #ef4444; }
 
         .btn-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
 
         .btn {
             display: flex; align-items: center; justify-content: center;
             padding: 14px 20px; border-radius: 10px; font-weight: bold; font-size: 1.05rem;
-            text-decoration: none; border: none; cursor: pointer; transition: all 0.2s ease;
+            text-decoration: none; border: none; cursor: pointer; transition: 0.2s;
         }
-        .btn:hover { transform: translateY(-2px); filter: brightness(1.08); }
-        .btn:active { transform: translateY(0); }
-        .btn-java { background: var(--primary); color: #052e16; box-shadow: 0 4px 14px rgba(34, 197, 94, 0.3); }
-        .btn-discord { background: var(--discord); color: #fff; box-shadow: 0 4px 14px rgba(88, 101, 242, 0.3); }
+        .btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        .btn-java { background: var(--primary); color: #052e16; }
+        .btn-discord { background: var(--discord); color: #fff; }
 
         .toast {
-            margin-top: 15px; padding: 12px; border-radius: 8px;
+            margin-top: 15px; padding: 10px; border-radius: 8px;
             background: rgba(34, 197, 94, 0.15); border: 1px solid var(--primary);
-            color: #86efac; font-size: 0.92rem; display: none;
+            color: #86efac; font-size: 0.95rem; display: none;
         }
 
         /* 內容區塊通用樣式 */
         section { max-width: 1000px; margin: 60px auto; padding: 0 20px; }
-        h2 { text-align: center; font-size: 1.9rem; margin-bottom: 35px; color: #f1f5f9; letter-spacing: 1px; }
+        h2 { text-align: center; font-size: 2rem; margin-bottom: 40px; color: #e2e8f0; }
         h2 span { color: var(--primary); }
 
         /* 伺服器特色卡片 */
-        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 22px; }
+        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
         .card {
-            background: var(--card-bg); padding: 28px; border-radius: 14px;
+            background: var(--card-bg); padding: 30px; border-radius: 14px;
             border: 1px solid #334155; transition: 0.3s;
         }
-        .card:hover { border-color: var(--primary); transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
-        .card-icon { font-size: 2.3rem; margin-bottom: 14px; }
-        .card h3 { font-size: 1.25rem; margin-bottom: 10px; color: #fff; }
+        .card:hover { border-color: var(--primary); transform: translateY(-4px); }
+        .card-icon { font-size: 2.5rem; margin-bottom: 15px; }
+        .card h3 { font-size: 1.3rem; margin-bottom: 10px; color: #fff; }
         .card p { color: var(--text-muted); font-size: 0.95rem; }
 
-        /* 常用指令快捷表 */
-        .cmd-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; }
-        .cmd-item {
-            background: #131c31; padding: 16px 20px; border-radius: 10px;
-            border: 1px solid #26334d; display: flex; flex-direction: column; gap: 6px;
-        }
-        .cmd-code { color: #38bdf8; font-family: Consolas, monospace; font-weight: bold; font-size: 1.05rem; }
-        .cmd-desc { color: var(--text-muted); font-size: 0.9rem; }
-
         /* 規章區塊 */
-        .rules-box { background: var(--card-bg); padding: 30px; border-radius: 14px; border: 1px solid #334155; }
+        .rules-box { background: var(--card-bg); padding: 35px; border-radius: 14px; border: 1px solid #334155; }
         .rules-list { list-style: none; }
-        .rules-list li { padding: 14px 0; border-bottom: 1px solid #334155; display: flex; align-items: center; }
+        .rules-list li { padding: 12px 0; border-bottom: 1px solid #334155; display: flex; align-items: center; }
         .rules-list li:last-child { border-bottom: none; }
         .rule-num {
             background: var(--primary); color: #052e16; font-weight: bold;
@@ -146,13 +109,13 @@
             align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0;
         }
 
-        footer { text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 0.9rem; border-top: 1px solid #1e293b; margin-top: 80px; }
+        footer { text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 0.9rem; border-top: 1px solid #1e293b; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="badge">✨ 支援 Java 最新版本</div>
+        <div class="badge">✨ 支援 Java 26.2</div>
         <h1>cn伺服器</h1>
         <p class="hero-desc">打造最純粹、穩定且充滿樂趣的生存冒險世界。無需安裝複雜模組，立即連線開啟你的專屬旅程！</p>
 
@@ -164,3 +127,120 @@
             </div>
 
             <div class="btn-grid">
+                <button class="btn btn-java" onclick="copyIP()">📋 Java 版：一鍵複製 IP</button>
+                <a class="btn btn-discord" href="https://discord.gg/qEU9gtHZuk" target="_blank" rel="noopener noreferrer">💬 加入官方 Discord 社群（獲取最新公告與禮包）</a>
+            </div>
+
+            <div class="toast" id="toast-msg">
+                ✅ 已複製 IP（<span id="toast-ip"></span>）！請開啟 Minecraft ➔ 多人遊戲 ➔ 新增伺服器 ➔ 按 Ctrl+V 貼上即可連線！
+            </div>
+        </div>
+    </header>
+
+    <section>
+        <h2>伺服器<span>核心特色</span></h2>
+        <div class="features">
+            <div class="card">
+                <div class="card-icon">⚔️</div>
+                <h3>原味進階生存</h3>
+                <p>保留原版建築與紅石樂趣，搭配領地保護系統，讓你的心血結晶完全不受熊孩子破壞。</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🎵</div>
+                <h3>自訂互動娛樂</h3>
+                <p>支援自訂音樂點播與豐富社群活動，與好友在遊戲中一邊建造一邊享受專屬背景音樂。</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">⚡</div>
+                <h3>高效能穩定主機</h3>
+                <p>採用 Paper 高效能核心與 24 小時穩定託管，提供流暢不卡頓的紅石與多人同樂體驗。</p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>玩家<span>基本規章</span></h2>
+        <div class="rules-box">
+            <ul class="rules-list">
+                <li><span class="rule-num">1</span>嚴禁使用任何外掛、作弊客戶端（如透視、飛行、自動連點腳本）或利用遊戲漏洞刷物品。</li>
+                <li><span class="rule-num">2</span>尊重每一位玩家，禁止在公共頻道刷屏、惡意謾罵、人身攻擊或散播不當連結。</li>
+                <li><span class="rule-num">3</span>禁止在他人領地周邊惡意破壞地形、製造紅石卡頓機器或進行詐騙交易。</li>
+                <li><span class="rule-num">4</span>請愛護伺服器環境，遇到任何問題或發現違規行為，歡迎隨時透過 Discord 回報管理員。</li>
+            </ul>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 cn伺服器 版權所有 | 本伺服器與 Mojang Studios 或 Microsoft 無任何官方關聯。</p>
+    </footer>
+
+    <script>
+        // 【請修改這裡】填入你的完整伺服器網域（不要包含 ://）
+        const SERVER_ADDRESS = "cn00.myvnc.com";
+
+        // 自動將設定填入畫面
+        document.getElementById("display-ip").innerText = SERVER_ADDRESS;
+        document.getElementById("toast-ip").innerText = SERVER_ADDRESS;
+
+        // 一鍵複製 IP 功能（含相容性備案）
+        function copyIP() {
+            const showToast = () => {
+                const toast = document.getElementById("toast-msg");
+                toast.style.display = "block";
+                setTimeout(() => { toast.style.display = "none"; }, 5000);
+            };
+
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(SERVER_ADDRESS).then(showToast);
+            } else {
+                const textArea = document.createElement("textarea");
+                textArea.value = SERVER_ADDRESS;
+                textArea.style.position = "fixed";
+                textArea.style.left = "-9999px";
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand("copy");
+                document.body.removeChild(textArea);
+                showToast();
+            }
+        }
+
+        // 使用 mcstatus.io API 偵測伺服器即時在線人數
+        const dot = document.getElementById("status-dot");
+        const text = document.getElementById("status-text");
+
+        async function updateServerStatus() {
+            dot.classList.remove("online", "offline");
+
+            try {
+                const response = await fetch(
+                    `https://api.mcstatus.io/v2/status/java/${encodeURIComponent(SERVER_ADDRESS)}`
+                );
+
+                if (!response.ok) {
+                    throw new Error("API 回應錯誤");
+                }
+
+                const data = await response.json();
+
+                if (data.online) {
+                    dot.classList.add("online");
+                    text.innerText = `伺服器在線中 (${data.players.online} / ${data.players.max} 人)`;
+                } else {
+                    dot.classList.add("offline");
+                    text.innerText = "伺服器目前離線或維護中";
+                }
+
+            } catch (error) {
+                dot.classList.add("offline");
+                text.innerText = "無法取得伺服器狀態";
+                console.error(error);
+            }
+        }
+
+        // 網站載入立即查詢，每 60 秒更新
+        updateServerStatus();
+        setInterval(updateServerStatus, 60000);
+    </script>
+</body>
+</html>
