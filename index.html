@@ -15,7 +15,19 @@
             --text-muted: #94a3b8;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: "Microsoft JhengHei", "Segoe UI", sans-serif; }
-        body { background-color: var(--bg-dark); color: var(--text-main); line-height: 1.6; }
+        
+        /* 自訂 Minecraft 像素風格鼠標（一般狀態：鑽石藍像素指標） */
+        body { 
+            background-color: var(--bg-dark); 
+            color: var(--text-main); 
+            line-height: 1.6;
+            cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 16 16'><path fill='%230f172a' d='M1 1h2v2h2v2h2v2h2v2h2v2H9v2H7v-2H5v2H3v-4H1V1z'/><path fill='%2338bdf8' d='M2 2h1v2h2v2h2v2h2v2H7v2H6v-2H4v2H3v-3H2V2z'/><path fill='%23e0f2fe' d='M2 2h1v6H2V2z'/></svg>") 2 2, auto;
+        }
+
+        /* 可點擊按鈕與連結的自訂鼠標（懸停狀態：櫻花粉像素手勢/十字準星） */
+        a, button, .btn, .card {
+            cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 16 16'><path fill='%230f172a' d='M6 1h4v4h4v4h-4v4H6V9H2V5h4V1z'/><path fill='%23f472b6' d='M7 2h2v4h4v2H9v4H7V8H3V6h4V2z'/><path fill='%23fbcfe8' d='M7 6h2v2H7V6z'/></svg>") 16 16, pointer !important;
+        }
 
         /* 頂部主視覺區塊（已套用全新的 Minecraft 櫻花背景） */
         header {
@@ -72,7 +84,7 @@
         .btn {
             display: flex; align-items: center; justify-content: center;
             padding: 14px 20px; border-radius: 10px; font-weight: bold; font-size: 1.05rem;
-            text-decoration: none; border: none; cursor: pointer; transition: 0.2s;
+            text-decoration: none; border: none; transition: 0.2s;
         }
         .btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
         .btn-java { background: var(--primary); color: #052e16; }
