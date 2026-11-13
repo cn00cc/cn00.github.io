@@ -68,6 +68,43 @@
             border-color: var(--primary);
         }
 
+        /* 🎵 右下角背景音樂播放器懸浮元件 */
+        .music-player-container {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 1000;
+        }
+        .music-btn {
+            background: var(--card-bg);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+        }
+        .music-btn:hover {
+            transform: translateY(-3px) scale(1.03);
+            border-color: var(--primary);
+            box-shadow: 0 8px 25px rgba(34, 197, 94, 0.25);
+        }
+        .music-icon {
+            font-size: 1.2rem;
+        }
+        /* 播放時音符圖示跳動動畫 */
+        .playing .music-icon {
+            animation: noteBounce 0.8s ease-in-out infinite alternate;
+        }
+        @keyframes noteBounce {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-4px); }
+        }
+
         /* 🌸 Minecraft 像素方塊櫻花雨動畫 */
         .sakura-container {
             position: fixed;
@@ -82,29 +119,16 @@
         .pixel-sakura {
             position: absolute;
             top: -20px;
-            /* 像素方塊邊緣銳利化 */
             image-rendering: pixelated;
             box-shadow: 2px 2px 0px rgba(244, 114, 182, 0.4);
             animation: pixelFall linear infinite;
         }
         @keyframes pixelFall {
-            0% {
-                transform: translateY(-5vh) translateX(0px) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.95;
-            }
-            50% {
-                transform: translateY(50vh) translateX(35px) rotate(180deg);
-            }
-            90% {
-                opacity: 0.9;
-            }
-            100% {
-                transform: translateY(105vh) translateX(-20px) rotate(360deg);
-                opacity: 0;
-            }
+            0% { transform: translateY(-5vh) translateX(0px) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.95; }
+            50% { transform: translateY(50vh) translateX(35px) rotate(180deg); }
+            90% { opacity: 0.9; }
+            100% { transform: translateY(105vh) translateX(-20px) rotate(360deg); opacity: 0; }
         }
 
         /* 頂部主視覺區塊 + 背景緩慢呼吸動態 */
@@ -158,10 +182,7 @@
         .delay-3 { animation-delay: 0.45s; }
 
         @keyframes fadeUpIn {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         h1 { font-size: 3rem; font-weight: 800; letter-spacing: 2px; margin-bottom: 15px; text-shadow: 0 4px 12px rgba(0,0,0,0.8); color: #fff; }
@@ -220,9 +241,7 @@
             transform: skewX(-25deg);
             transition: left 0.6s ease;
         }
-        .btn:hover::after {
-            left: 150%;
-        }
+        .btn:hover::after { left: 150%; }
         .btn:hover { transform: translateY(-2px); filter: brightness(1.08); }
         .btn:active { transform: translateY(1px); }
         .btn-java { background: var(--primary); color: #052e16; }
@@ -306,6 +325,18 @@
         <button class="theme-btn" id="theme-toggle-btn" onclick="toggleTheme()">
             <span id="theme-icon">🌙</span> <span id="theme-text">切換亮色模式</span>
         </button>
+    </div>
+
+    <!-- 🎵 背景音樂播放器元件 -->
+    <div class="music-player-container">
+        <button class="music-btn" id="music-toggle-btn" onclick="toggleMusic()">
+            <span class="music-icon" id="music-icon">🎵</span> 
+            <span id="music-text">播放背景音樂</span>
+        </button>
+        <!-- 使用線上輕柔純音樂來源 -->
+        <audio id="bgm" loop>
+            <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf7f6.mp3?filename=lofi-study-112191.mp3" type="audio/mpeg">
+        </audio>
     </div>
 
     <!-- Minecraft 像素櫻花飄落特效層 -->
@@ -476,18 +507,36 @@
             }
         }
 
+        /* 🎵 背景音樂開關控制 */
+        function toggleMusic() {
+            const bgm = document.getElementById("bgm");
+            const musicBtn = document.getElementById("music-toggle-btn");
+            const musicText = document.getElementById("music-text");
+
+            if (bgm.paused) {
+                bgm.play().then(() => {
+                    musicBtn.classList.add("playing");
+                    musicText.innerText = "暫停背景音樂";
+                }).catch(e => {
+                    console.log("播放失敗或瀏覽器阻擋自動播放", e);
+                });
+            } else {
+                bgm.pause();
+                musicBtn.classList.remove("playing");
+                musicText.innerText = "播放背景音樂";
+            }
+        }
+
         /* 🌸 Minecraft 像素方塊櫻花花瓣飄落特效 */
         function createPixelSakura() {
             const container = document.getElementById("sakura-container");
             const sakuraCount = 30;
-            // Minecraft 櫻花樹葉常見的幾種粉色調
             const colors = ["#ffb7c5", "#f472b6", "#fbcfe8", "#f9a8d4"];
 
             for (let i = 0; i < sakuraCount; i++) {
                 const petal = document.createElement("div");
                 petal.classList.add("pixel-sakura");
                 
-                // 隨機像素方塊尺寸 (例如 6x6, 8x6, 10x8)
                 const width = Math.floor(Math.random() * 6) + 6;
                 const height = Math.floor(Math.random() * 5) + 5;
                 
@@ -495,7 +544,7 @@
                 petal.style.height = `${height}px`;
                 petal.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
                 petal.style.left = `${Math.random() * 100}vw`;
-                petal.style.animationDuration = `${Math.random() * 6 + 5}s`; // 5秒 ~ 11秒
+                petal.style.animationDuration = `${Math.random() * 6 + 5}s`;
                 petal.style.animationDelay = `${Math.random() * 6}s`;
                 
                 container.appendChild(petal);
@@ -517,7 +566,6 @@
             });
         }
         window.addEventListener("scroll", revealOnScroll);
-        // 載入時先檢查一次
         revealOnScroll();
     </script>
 </body>
