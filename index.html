@@ -28,9 +28,8 @@
             --panel-bg: rgba(255, 255, 255, 0.92);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: "Microsoft JhengHei", "Segoe UI", sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: "Microsoft JhengHei", "Segoe UI", sans-serif; scroll-behavior: smooth; }
         
-        /* 🌟 將整份網頁的背景統一換成鮮明的風景圖，並加上深色遮罩確保文字清晰 */
         body { 
             background: linear-gradient(rgba(15, 23, 42, 0.78), rgba(15, 23, 42, 0.88)), 
                         url('watermarked_img_15164545292434901225.jpg') center/cover fixed no-repeat;
@@ -41,8 +40,85 @@
             cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 16 16'><path fill='%230f172a' d='M1 1h2v2h2v2h2v2h2v2h2v2H9v2H7v-2H5v2H3v-4H1V1z'/><path fill='%2338bdf8' d='M2 2h1v2h2v2h2v2h2v2H7v2H6v-2H4v2H3v-3H2V2z'/><path fill='%23e0f2fe' d='M2 2h1v6H2V2z'/></svg>") 2 2, auto;
         }
 
-        a, button, .btn, .card {
+        a, button, .btn, .card, .menu-toggle, .dropdown-item {
             cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 16 16'><path fill='%230f172a' d='M6 1h4v4h4v4h-4v4H6V9H2V5h4V1z'/><path fill='%23f472b6' d='M7 2h2v4h4v2H9v4H7V8H3V6h4V2z'/><path fill='%23fbcfe8' d='M7 6h2v2H7V6z'/></svg>") 16 16, pointer !important;
+        }
+
+        /* 🍔 左上角漢堡選單樣式 */
+        .menu-container {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+        }
+        .menu-toggle {
+            background: rgba(30, 41, 59, 0.9);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            width: 46px;
+            height: 46px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            backdrop-filter: blur(8px);
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .menu-toggle:hover {
+            transform: scale(1.06);
+            border-color: var(--primary);
+        }
+        .menu-toggle span {
+            display: block;
+            width: 22px;
+            height: 3px;
+            background-color: var(--text-main);
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        /* 下拉選單面板 */
+        .dropdown-menu {
+            position: absolute;
+            top: 56px;
+            left: 0;
+            width: 200px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            backdrop-filter: blur(12px);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            animation: fadeInMenu 0.25s ease;
+        }
+        .dropdown-menu.show {
+            display: flex;
+        }
+        @keyframes fadeInMenu {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .dropdown-item {
+            padding: 14px 20px;
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.05rem;
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.2s, color 0.2s, padding-left 0.2s;
+        }
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+        .dropdown-item:hover {
+            background-color: rgba(34, 197, 94, 0.15);
+            color: var(--primary);
+            padding-left: 24px;
         }
 
         /* 🎬 進入動畫開場畫面 */
@@ -333,7 +409,7 @@
         h2 { text-align: center; font-size: 2rem; margin-bottom: 40px; color: var(--text-main); text-shadow: 0 2px 6px rgba(0,0,0,0.5); }
         h2 span { color: var(--primary); }
 
-        /* 伺服器特色卡片（半透明毛玻璃質感，在鮮明背景上更好看） */
+        /* 伺服器特色卡片 */
         .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
         .card {
             background: var(--card-bg); 
@@ -389,6 +465,22 @@
 </head>
 <body>
 
+    <!-- 🍔 左上角漢堡選單 -->
+    <div class="menu-container">
+        <button class="menu-toggle" onclick="toggleMenu()" title="選單">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div class="dropdown-menu" id="dropdown-menu">
+            <a href="#server-status" class="dropdown-item" onclick="toggleMenu()">狀態</a>
+            <a href="#features-section" class="dropdown-item" onclick="toggleMenu()">玩家 / 特色</a>
+            <a href="#live-map" class="dropdown-item" onclick="toggleMenu()">新手手冊</a>
+            <a href="#rules-section" class="dropdown-item" onclick="toggleMenu()">規則</a>
+            <a href="https://discord.gg/qEU9gtHZuK" target="_blank" class="dropdown-item">Discord</a>
+        </div>
+    </div>
+
     <!-- 🎬 進入動畫開場畫面 -->
     <div id="intro-screen">
         <div class="intro-logo">🌸</div>
@@ -421,7 +513,7 @@
     <!-- Minecraft 像素櫻花飄落特效層 -->
     <div class="sakura-container" id="sakura-container"></div>
 
-    <header>
+    <header id="server-status">
         <div class="badge">✨ 支援 Java 26.2</div>
         <h1 class="hero-animate delay-1">cn伺服器</h1>
         <p class="hero-desc hero-animate delay-2">打造最純粹、穩定且充滿樂趣的生存冒險世界。無需安裝複雜模組，立即連線開啟你的專屬旅程！</p>
@@ -444,7 +536,7 @@
         </div>
     </header>
 
-    <section class="reveal">
+    <section id="features-section" class="reveal">
         <h2>伺服器<span>核心特色</span></h2>
         <div class="features">
             <div class="card">
@@ -488,7 +580,7 @@
         </div>
     </section>
 
-    <section class="reveal">
+    <section id="rules-section" class="reveal">
         <h2>玩家<span>基本規章</span></h2>
         <div class="rules-box">
             <ul class="rules-list">
@@ -505,6 +597,21 @@
     </footer>
 
     <script>
+        /* 🍔 切換漢堡選單開關 */
+        function toggleMenu() {
+            const menu = document.getElementById("dropdown-menu");
+            menu.classList.toggle("show");
+        }
+
+        /* 點擊畫面其他地方自動關閉選單 */
+        window.addEventListener("click", function(e) {
+            const container = document.querySelector(".menu-container");
+            const menu = document.getElementById("dropdown-menu");
+            if (!container.contains(e.target)) {
+                menu.classList.remove("show");
+            }
+        });
+
         function enterWebsite() {
             const intro = document.getElementById("intro-screen");
             if (intro) {
